@@ -1,6 +1,5 @@
 // ScoreInput 组件
 
-import React from 'react';
 import { ScoreItemConfig } from '../../types/review';
 
 interface ScoreInputProps {

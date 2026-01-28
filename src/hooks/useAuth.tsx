@@ -1,10 +1,9 @@
 // 授权状态管理 Hook
 
-import { useContext, useState, useEffect, useCallback } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../stores/auth.tsx';
-import { User, AuthState } from '../types';
 import { STORAGE_KEYS } from '../utils/constants';
-import { exchangeCodeForToken, refreshAccessToken } from '../services/feishu/auth';
+import { exchangeCodeForToken } from '../services/feishu/auth';
 import { getUserInfo } from '../services/feishu/user';
 
 export function useAuth() {
@@ -65,18 +64,4 @@ export function useAuthCallback() {
   }, [refreshToken, updateUser]);
 
   return { loading, error };
-}
-
-// 检查是否已授权的 hook
-export function useIsAuthenticated() {
-  const { isAuthenticated, refreshToken } = useAuth();
-
-  useEffect(() => {
-    if (!isAuthenticated && refreshToken) {
-      // 有 refresh_token 但没有 access_token，尝试刷新
-      // 实际刷新逻辑在需要时调用
-    }
-  }, [isAuthenticated, refreshToken]);
-
-  return isAuthenticated;
 }

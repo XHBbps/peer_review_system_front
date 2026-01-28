@@ -1,6 +1,6 @@
 // ReviewForm 组件
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { SCORE_ITEMS } from '../../types/review';
 import ScoreInput from './ScoreInput';
 import Button from '../common/Button';

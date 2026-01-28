@@ -1,6 +1,5 @@
 // TaskItem 组件
 
-import React from 'react';
 import { ReviewTask } from '../../types';
 import { BITABLE_TABLES } from '../../utils/constants';
 

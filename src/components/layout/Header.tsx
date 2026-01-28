@@ -1,6 +1,5 @@
 // Header 组件
 
-import React from 'react';
 import { useAuth } from '../../hooks/useAuth.tsx';
 
 export default function Header() {

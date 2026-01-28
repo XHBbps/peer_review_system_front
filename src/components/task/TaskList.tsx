@@ -1,6 +1,6 @@
 // TaskList 组件
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ReviewTask } from '../../types';
 import TaskItem from './TaskItem';
 
