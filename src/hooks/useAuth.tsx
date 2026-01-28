@@ -15,7 +15,7 @@ export function useAuth() {
 }
 
 export function useAuthCallback() {
-  const { refreshToken, updateUser } = useAuth();
+  const { updateUser } = useAuth();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -61,7 +61,7 @@ export function useAuthCallback() {
     }
 
     handleCallback();
-  }, [refreshToken, updateUser]);
+  }, [updateUser]);
 
   return { loading, error };
 }

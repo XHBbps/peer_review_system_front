@@ -56,6 +56,7 @@ export default function ReviewFormPage() {
     if (success) {
       navigate('/');
     }
+    return success;
   };
 
   const handleCancel = () => {
