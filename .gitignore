@@ -1,0 +1,27 @@
+# Claude AI Agent files
+# Some agents may store credentials, auth tokens, or other identifying and private artifacts
+.claude/
+
+# Common ignores
+node_modules/
+.DS_Store
+*.log
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Build outputs
+dist/
+build/
+*.tsbuildinfo
+
+# OS
+Thumbs.db
+.DS_Store
