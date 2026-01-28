@@ -6,10 +6,10 @@ import { STORAGE_KEYS } from '../utils/constants';
 import { exchangeCodeForToken, refreshAccessToken } from '../services/feishu/auth';
 import { getUserInfo } from '../services/feishu/user';
 
-interface AuthContextType extends AuthState {
+interface AuthContextType extends Omit<AuthState, 'refreshToken'> {
   login: () => void;
   logout: () => void;
-  refreshToken: () => Promise<void>;
+  doRefreshToken: () => Promise<string>;
   updateUser: (user: User) => void;
 }
 
@@ -35,12 +35,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setState({
           isAuthenticated: true,
           user,
-          accessToken: null, // access_token 不持久化
+          accessToken: null,
           refreshToken: storedRefreshToken,
           expiresAt: null,
         });
       } catch {
-        // 用户信息解析失败，清除存储
         localStorage.removeItem(STORAGE_KEYS.refresh_token);
         localStorage.removeItem(STORAGE_KEYS.user_info);
       }
@@ -72,7 +71,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   // 刷新 token
-  const refreshToken = useCallback(async () => {
+  const doRefreshToken = useCallback(async () => {
     if (!state.refreshToken) {
       throw new Error('No refresh token available');
     }
@@ -95,7 +94,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ ...state, login, logout, refreshToken, updateUser }}>
+    <AuthContext.Provider value={{ ...state, login, logout, doRefreshToken, updateUser }}>
       {children}
     </AuthContext.Provider>
   );
@@ -111,7 +110,7 @@ export function useAuth() {
 
 // 处理授权回调的 hook
 export function useAuthCallback() {
-  const { refreshToken, updateUser } = useAuth();
+  const { updateUser } = useAuth();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -119,7 +118,7 @@ export function useAuthCallback() {
     async function handleCallback() {
       const params = new URLSearchParams(window.location.search);
       const code = params.get('code');
-      const state = params.get('state');
+      const stateParam = params.get('state');
       const storedState = sessionStorage.getItem('oauth_state');
 
       if (!code) {
@@ -128,34 +127,26 @@ export function useAuthCallback() {
         return;
       }
 
-      if (state !== storedState) {
+      if (stateParam !== storedState) {
         setError('CSRF 验证失败');
         setLoading(false);
         return;
       }
 
       try {
-        // 交换 code 获取 token
         const redirectUri = `${window.location.origin}/auth/callback`;
         const tokenResponse = await exchangeCodeForToken(code, redirectUri);
-
-        // 获取用户信息
         const userInfo = await getUserInfo(tokenResponse.access_token);
 
-        // 存储 refresh_token
         localStorage.setItem(STORAGE_KEYS.refresh_token, tokenResponse.refresh_token);
 
-        // 更新状态
         updateUser({
           user_id: userInfo.user_id,
           name: userInfo.name,
           avatar_url: userInfo.avatar_url,
         });
 
-        // 清除 state
         sessionStorage.removeItem('oauth_state');
-
-        // 跳转到首页
         window.location.href = '/';
       } catch (err) {
         setError(err instanceof Error ? err.message : '授权失败');
@@ -165,7 +156,7 @@ export function useAuthCallback() {
     }
 
     handleCallback();
-  }, [refreshToken, updateUser]);
+  }, [updateUser]);
 
   return { loading, error };
 }

@@ -1,6 +1,5 @@
 // 授权回调页面
 
-import React from 'react';
 import { useAuthCallback } from '../../hooks/useAuth.tsx';
 import { FullScreenLoading } from '../../components/common/Loading';
 

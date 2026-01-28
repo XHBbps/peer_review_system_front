@@ -1,6 +1,6 @@
 // 评议表单页面
 
-import React, { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth.tsx';
 import { useReview } from '../../hooks/useReview.tsx';
@@ -20,16 +20,13 @@ export default function ReviewFormPage() {
     scores,
     setScore,
     submitReview,
-    totalScore,
     isValid,
     errors,
     isSubmitting,
   } = useReview(taskId || '', tableId);
 
-  // 获取表名
   const tableName = BITABLE_TABLES.find((t) => t.table_id === tableId)?.table_name || '';
 
-  // 未授权时重定向到登录
   useEffect(() => {
     if (!isAuthenticated) {
       login();
@@ -67,7 +64,6 @@ export default function ReviewFormPage() {
 
   return (
     <div className="max-w-2xl mx-auto">
-      {/* 返回按钮 */}
       <button
         onClick={handleCancel}
         className="flex items-center text-gray-600 hover:text-gray-900 mb-4"
@@ -78,7 +74,6 @@ export default function ReviewFormPage() {
         返回列表
       </button>
 
-      {/* 页面标题 */}
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-gray-900">评议评分</h2>
         <p className="text-gray-600 mt-1">
@@ -86,16 +81,14 @@ export default function ReviewFormPage() {
         </p>
       </div>
 
-      {/* 错误提示 */}
       {errors.length > 0 && (
         <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
-          {errors.map((error, index) => (
-            <p key={index} className="text-sm text-red-600">{error}</p>
+          {errors.map((err, index) => (
+            <p key={index} className="text-sm text-red-600">{err}</p>
           ))}
         </div>
       )}
 
-      {/* 评分表单 */}
       <ReviewForm
         subjectName=""
         scores={scores}

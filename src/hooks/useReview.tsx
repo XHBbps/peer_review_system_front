@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { useAuth } from './useAuth';
-import { updateScore, searchTaskRecords } from '../services/feishu/bitable';
+import { updateScore } from '../services/feishu/bitable';
 import { SCORE_FIELD_MAP } from '../types/review';
 import { validateAllScores } from '../utils/validators';
 
@@ -46,7 +46,6 @@ export function useReview(taskId: string, tableId: string, initialScores?: Recor
     setErrors([]);
 
     try {
-      // 将前端字段名转换为飞书字段名
       const fields: Record<string, unknown> = {};
       for (const [key, score] of Object.entries(scores)) {
         const fieldName = SCORE_FIELD_MAP[key];

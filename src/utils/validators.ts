@@ -8,9 +8,6 @@ export interface ValidationResult {
   errors: string[];
 }
 
-/**
- * 校验单个评分项
- */
 export function validateScore(key: string, score: number): ValidationResult {
   const errors: string[] = [];
   const item = SCORE_ITEMS.find((i) => i.key === key);
@@ -36,9 +33,6 @@ export function validateScore(key: string, score: number): ValidationResult {
   return { isValid: errors.length === 0, errors };
 }
 
-/**
- * 校验所有评分项
- */
 export function validateAllScores(scores: Record<string, number>): ValidationResult {
   const errors: string[] = [];
 
@@ -55,9 +49,6 @@ export function validateAllScores(scores: Record<string, number>): ValidationRes
   return { isValid: errors.length === 0, errors };
 }
 
-/**
- * 校验工号格式
- */
 export function validateEmployeeId(employeeId: string): ValidationResult {
   const errors: string[] = [];
 
@@ -70,9 +61,6 @@ export function validateEmployeeId(employeeId: string): ValidationResult {
   return { isValid: errors.length === 0, errors };
 }
 
-/**
- * 校验授权回调参数
- */
 export function validateAuthCallback(): ValidationResult {
   const errors: string[] = [];
   const code = new URLSearchParams(window.location.search).get('code');
@@ -84,9 +72,6 @@ export function validateAuthCallback(): ValidationResult {
   return { isValid: errors.length === 0, errors };
 }
 
-/**
- * 获取评分项配置
- */
 export function getScoreItemConfig(key: string): ScoreItemConfig | undefined {
   return SCORE_ITEMS.find((item) => item.key === key);
 }

@@ -1,6 +1,6 @@
 // 任务列表页面
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTasks } from '../../hooks/useTasks.tsx';
 import { useAuth } from '../../hooks/useAuth.tsx';
@@ -8,7 +8,6 @@ import TaskList from '../../components/task/TaskList';
 import { ReviewTask } from '../../types';
 import ReviewForm from '../../components/review/ReviewForm';
 import Modal from '../../components/common/Modal';
-import { BITABLE_TABLES } from '../../utils/constants';
 
 export default function TaskListPage() {
   const navigate = useNavigate();
@@ -16,12 +15,10 @@ export default function TaskListPage() {
   const { tasks, loading, error, refresh } = useTasks();
   const [selectedTask, setSelectedTask] = useState<ReviewTask | null>(null);
 
-  // 处理评议按钮点击
   const handleReview = (task: ReviewTask) => {
     navigate(`/review/${task.task_id}?tableId=${task.subject_type}`);
   };
 
-  // 未授权时显示登录按钮
   if (!isAuthenticated) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center">
@@ -46,7 +43,6 @@ export default function TaskListPage() {
 
   return (
     <div>
-      {/* 页面标题 */}
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-gray-900">评议任务</h2>
         <p className="text-gray-600 mt-1">
@@ -54,7 +50,6 @@ export default function TaskListPage() {
         </p>
       </div>
 
-      {/* 任务列表 */}
       <TaskList
         tasks={tasks}
         loading={loading}
@@ -62,7 +57,6 @@ export default function TaskListPage() {
         onReview={handleReview}
       />
 
-      {/* 刷新按钮 */}
       <div className="mt-6 text-center">
         <button
           onClick={() => refresh()}
@@ -72,7 +66,6 @@ export default function TaskListPage() {
         </button>
       </div>
 
-      {/* 表单弹窗 (移动端全屏显示) */}
       {selectedTask && (
         <Modal
           isOpen={true}

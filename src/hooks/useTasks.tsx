@@ -4,7 +4,6 @@ import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from './useAuth';
 import { getAllTaskRecords } from '../services/feishu/bitable';
 import { ReviewTask } from '../types';
-import { SCORE_FIELD_MAP } from '../types/review';
 
 interface UseTasksReturn {
   tasks: ReviewTask[];
@@ -38,7 +37,6 @@ export function useTasks(): UseTasksReturn {
           const fields = record.fields;
           const subject = (fields['被评议主体'] as Array<{ id: string; name: string; avatar_url: string }>)?.[0];
 
-          // 计算总分
           let totalScore: number | null = null;
           const totalScoreField = fields['总分'];
           if (totalScoreField && typeof totalScoreField === 'object' && 'value' in totalScoreField) {
@@ -48,7 +46,6 @@ export function useTasks(): UseTasksReturn {
             }
           }
 
-          // 检查是否已评议 (有评议人)
           const reviewer = fields['评议人'] as Array<{ id: string }> | undefined;
           const status = reviewer && reviewer.length > 0 ? 'completed' : 'pending';
 
