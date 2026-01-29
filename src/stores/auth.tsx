@@ -6,7 +6,7 @@ import { STORAGE_KEYS } from '../utils/constants';
 import { exchangeCodeForToken, refreshAccessToken } from '../services/feishu/auth';
 import { getUserInfo } from '../services/feishu/user';
 
-interface AuthContextType extends Omit<AuthState, 'refreshToken'> {
+interface AuthContextType extends AuthState {
   login: () => void;
   logout: () => void;
   doRefreshToken: () => Promise<string>;
@@ -48,7 +48,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // 登录 - 跳转到授权页
   const login = useCallback(() => {
-    const redirectUri = `${window.location.origin}/auth/callback`;
+    const redirectUri = 'https://18bjbs652658.vicp.fun/auth/callback';
     const stateParam = Math.random().toString(36).substring(2);
     sessionStorage.setItem('oauth_state', stateParam);
 
@@ -134,7 +134,7 @@ export function useAuthCallback() {
       }
 
       try {
-        const redirectUri = `${window.location.origin}/auth/callback`;
+        const redirectUri = 'https://18bjbs652658.vicp.fun/auth/callback';
         const tokenResponse = await exchangeCodeForToken(code, redirectUri);
         const userInfo = await getUserInfo(tokenResponse.access_token);
 
